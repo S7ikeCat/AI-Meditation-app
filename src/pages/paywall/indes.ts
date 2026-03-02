@@ -1,1 +1,1 @@
-export { PaywallScreen as default } from "./ui/PaywallScreen";
+export { default } from "./ui/PaywallScreen";

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, Alert, Pressable } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
@@ -9,7 +9,7 @@ import { MeditationCard } from "@/entities/meditation/ui/MeditationCard";
 import { AiMoodCard } from "@/features/ai-mood";
 
 export default function MeditationsScreen() {
-  const { isSubscribed, reset } = useSubscription();
+  const { isSubscribed, reset} = useSubscription();
 
   function onPressMeditation(item: Meditation) {
     console.log("pressed card:", item.title);
@@ -29,7 +29,7 @@ export default function MeditationsScreen() {
       <View style={styles.header}>
         <Text style={styles.h1}>Медитации</Text>
 
-        {/* <Pressable
+        <Pressable
   onPress={() => {
     reset();
     router.replace("/");
@@ -37,7 +37,7 @@ export default function MeditationsScreen() {
   style={styles.smallBtn}
 >
   <Text style={styles.smallBtnText}>Сброс</Text>
-</Pressable> */}
+</Pressable>
       </View>
 
       <FlatList
