@@ -1,0 +1,1 @@
+export type Mood = "good" | "neutral" | "bad";

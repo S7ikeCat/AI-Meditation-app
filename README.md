@@ -1,50 +1,189 @@
-# Welcome to your Expo app 👋
+# ZenPulse: AI Meditation App (Prototype)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Прототип мобильного приложения для медитаций с системой подписки (Paywall), списком сессий и AI-генерацией аффирмаций.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Стек
 
-   ```bash
-   npm install
-   ```
+- Expo + React Native
+- Expo Router (file-based routing)
+- react-native-safe-area-context
+- Архитектура: FSD (pages / features / entities)
+- AI: мок-LLM (асинхронная генерация с задержкой)
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 📱 Реализованный функционал (по ТЗ)
 
-In the output, you'll find options to open the app in a
+### 1️⃣ Экран Paywall
+- Премиальный темный дизайн
+- Список преимуществ Premium
+- Два тарифа (Месячный / Годовой)
+- Годовой визуально выделен как выгодный
+- Кнопка «Попробовать бесплатно» имитирует успешную покупку
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 2️⃣ Экран Медитаций (Главный)
 
-## Get a fresh project
+- Список карточек (название + длительность)
+- Free и Premium контент
+- Locked-логика:
+  - если `isSubscribed = false` и медитация Premium → карточка серая + 🔒
+  - при нажатии на locked → переход на Paywall
+- После “покупки” Premium карточки становятся активными
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+Условие блокировки:
+```ts
+const locked = item.isPremium && !isSubscribed;
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+### 3️⃣ AI «Настрой дня»
 
-To learn more about developing your project with Expo, look at the following resources:
+- Выбор настроения (3 смайлика)
+- Кнопка генерации
+- Асинхронная генерация текста (имитация LLM запроса)
+- Loading-состояние ("Генерирую...")
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 🖼 Скриншоты 
 
-Join our community of developers creating universal apps.
+## Главный экран 
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+![Главный экран](./screenshots/Главный%20экран.png)
+
+
+## Экран Paywall
+
+
+![Экран Paywall](./screenshots/Экран%20Paywall.png)
+---
+
+## 🧭 Routing
+
+Используется Expo Router:
+
+- `/` → экран медитаций
+- `/paywall` → экран подписки
+
+Глобальные провайдеры подключены в `app/_layout.tsx`.
+
+---
+
+## 🔐 Логика подписки
+
+Подписка реализована через React Context:
+
+- `isSubscribed` — флаг доступа
+- `subscribe()` — имитация покупки
+- `reset()` — вспомогательная dev-функция
+
+Locked-логика реализована на уровне карточек, а не глобальным редиректом, что соответствует требованиям ТЗ.
+
+---
+
+## 🏗 Архитектура (FSD)
+
+```
+src/
+  pages/
+  features/
+    subscription/
+    ai-mood/
+  entities/
+    meditation/
+
+app/
+  _layout.tsx
+  index.tsx
+  paywall.tsx
+```
+
+`app/` содержит только routing (Expo Router).  
+Бизнес-логика и UI разделены по FSD.
+
+---
+
+## ▶ Как запустить
+
+### Установка:
+```bash
+npm install
+```
+
+### Запуск:
+```bash
+npx expo start
+```
+
+- Web — в браузере
+- Mobile — через Expo Go или Android эмулятор
+
+---
+
+## 🎬 Демонстрационный сценарий
+
+1. Открыть приложение
+2. Увидеть locked Premium карточки
+3. Нажать на Premium → переход на Paywall
+4. Нажать «Попробовать бесплатно»
+5. Вернуться к списку → Premium разблокирован
+6. В AI блоке выбрать настроение и сгенерировать текст
+
+---
+
+## 🤖 Использование AI
+
+AI использовался для:
+
+- Генерации первоначальной верстки Paywall
+- Итераций по мобильной адаптации
+- Улучшения структуры компонентов
+- Реализации mock-LLM генератора
+- Быстрой правки layout при переполнении
+
+---
+
+## 🤖 Как ИИ справился с мобильной спецификой
+
+ИИ помог быстро собрать мобильный интерфейс, но требовал итерационной доработки в следующих аспектах:
+
+### Навигация
+- Использован Expo Router (file-based routing)
+- Изначально была реализована вкладочная навигация (Tabs), но для соответствия ТЗ она была упрощена до Stack-навигации
+- Логика перехода на Paywall реализована через `router.push("/paywall")`
+- Глобальный гейт через Redirect был убран, чтобы корректно отобразить locked-контент
+
+### SafeArea и отступы
+- Использован `SafeAreaProvider` в `app/_layout.tsx`
+- Ключевые экраны обёрнуты в `SafeAreaView`
+- Paywall обёрнут в `ScrollView`, чтобы избежать обрезания CTA на маленьких экранах
+- После генерации верстки ИИ вручную корректировались:
+  - padding
+  - gap
+  - размеры карточек
+  - высота кнопок
+
+### Контроль адаптивности
+- Проверка интерфейса на разных размерах экрана (маленький экран vs большой)
+- Исправление переполнения контента
+- Проверка кликабельности элементов в нижней части экрана
+
+ИИ значительно ускорил разработку UI, но мобильная специфика (SafeArea, вертикальный overflow, навигационные группы) потребовала ручной корректировки и архитектурных решений.
+
+---
+
+## 📌 Итог
+
+Прототип реализует:
+
+- Paywall-логику
+- Locked контент
+- AI-генерацию
+- Корректную мобильную адаптацию
+- Чистую архитектуру
