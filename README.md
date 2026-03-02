@@ -62,6 +62,13 @@ const locked = item.isPremium && !isSubscribed;
 
 
 ![Экран Paywall](./screenshots/Экран%20Paywall.png)
+
+---
+
+## 🎥 Demo
+
+[![Watch the demo](./screenshots/Главный%20экран.png)](./Video-of-app.mp4)
+
 ---
 
 ## 🧭 Routing
