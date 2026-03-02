@@ -65,9 +65,10 @@ const locked = item.isPremium && !isSubscribed;
 
 ---
 
-## 🎥 Demo
+## 🎥 Screencast
 
-[![Watch the demo](./screenshots/Главный%20экран.png)](./Video-of-app.mp4)
+Watch full demo here:  
+https://raw.githubusercontent.com/S7ikeCat/AI-Meditation-app/main/Video-of-app.mp4
 
 ---
 
